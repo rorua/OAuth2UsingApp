@@ -44,4 +44,11 @@ return [
         ],
     ],
 
+    'fusionauth' => [
+        'client_id' => env('CLIENT_ID'),
+        'client_secret' => env('CLIENT_SECRET'),
+        'callback_url' => env('APP_URL') . '/' . env('CALLBACK_URL'),
+        'provider_url' => env('PROVIDER_URL')
+    ]
+
 ];

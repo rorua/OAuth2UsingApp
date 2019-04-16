@@ -5,29 +5,37 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\User;
 use GuzzleHttp\Client;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-    const CLIENT_ID = 'a00c5abb-84d8-441c-ab73-db744334c6a7';
+    private $CLIENT_ID;
 
-    const CLIENT_SECRET = 'irkjzhbGVolA6iFDf4VJClMNP2jI_VDXo1kwYQWvaKo';
+    private $CLIENT_SECRET;
 
-    const REDIRECT_URL = 'http://auth.loc/login/callback';
+    private $CALLBACK_URL;
 
-    const PROVIDER_URL = 'http://localhost:9011';
+    private $PROVIDER_URL;
+
+    public function __construct()
+    {
+        $this->CLIENT_ID = config('services.fusionauth.client_id');
+        $this->CLIENT_SECRET = config('services.fusionauth.client_secret');
+        $this->CALLBACK_URL = config('services.fusionauth.callback_url');
+        $this->PROVIDER_URL = config('services.fusionauth.provider_url');
+    }
+
 
     /**
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function redirectToProvider()
     {
-        $client_id = self::CLIENT_ID;
-        $redirect_url = self::REDIRECT_URL;
-        $provider_url = self::PROVIDER_URL;
+        $client_id = $this->CLIENT_ID;
+        $callback_url = $this->CALLBACK_URL;
+        $provider_url = $this->PROVIDER_URL;
 
-        return redirect("{$provider_url}/oauth2/authorize?client_id={$client_id}&redirect_uri={$redirect_url}&response_type=code");
+        return redirect("{$provider_url}/oauth2/authorize?client_id={$client_id}&redirect_uri={$callback_url}&response_type=code");
     }
 
     /**
@@ -36,12 +44,12 @@ class LoginController extends Controller
      */
     public function handleProviderCallback(Request $request)
     {
-        $provider_url = self::PROVIDER_URL;
+        $provider_url = $this->PROVIDER_URL;
         $token_url = $provider_url . '/oauth2/token';
 
         $params = [
-            'client_id' => self::CLIENT_ID,
-            'redirect_uri' => self::REDIRECT_URL,
+            'client_id' => $this->CLIENT_ID,
+            'redirect_uri' => $this->CALLBACK_URL,
             'grant_type' => 'authorization_code',
             'code' => $request->input('code'),
         ];
@@ -51,10 +59,9 @@ class LoginController extends Controller
             $query_params .= $key . '=' . $param . '&';
         }
 
+        $header = base64_encode($this->CLIENT_ID . ':' . $this->CLIENT_SECRET);
+
         $guzzle = new Client();
-
-        $header = base64_encode(self::CLIENT_ID . ':' . self::CLIENT_SECRET);
-
         $response = $guzzle->request('POST', $token_url . $query_params, [
             'headers' => ['Authorization' => 'Basic ' . $header],
         ]);
@@ -78,8 +85,9 @@ class LoginController extends Controller
 
         }
 
-        //return redirect('/');
-        return compact('access_token', 'expires_in', 'token_type', 'user_id');
+        //todo
+        return redirect('/');
+        //return compact('access_token', 'expires_in', 'token_type', 'user_id');
 
     }
 
@@ -89,7 +97,7 @@ class LoginController extends Controller
      */
     private function getUserByToken($token)
     {
-        $userinfo_url = self::PROVIDER_URL . '/oauth2/userinfo';
+        $userinfo_url = $this->PROVIDER_URL . '/oauth2/userinfo';
 
         $guzzle = new Client();
 
@@ -130,7 +138,7 @@ class LoginController extends Controller
      */
     public function logout()
     {
-        $logout_url = self::PROVIDER_URL . '/oauth2/logout?client_id=' . self::CLIENT_ID;
+        $logout_url = $this->PROVIDER_URL . '/oauth2/logout?client_id=' . $this->CLIENT_ID;
 
         $guzzle = new Client();
 
