@@ -70,7 +70,8 @@
                     @auth
                         <a href="{{ url('/home') }}">Home</a>
                     @else
-                        <a href="{{ route('login') }}">Login with FusionAuth</a>
+                        <a href="{{ route('login', 'fusionauth') }}">Login with FusionAuth</a>
+                        <a href="{{ route('login', 'keycloak') }}">Login with Keycloak</a>
                     @endauth
                 </div>
             @endif
@@ -82,9 +83,11 @@
 
                 <div class="links">
                     <a href="https://laravel.com/docs">Laravel</a>
-                    <a href="FusionAuth">FusionAuth</a>
+                    <a href="https://fusionauth.io/">FusionAuth</a>
                     <a href="https://github.com/FusionAuth">FusionAuth GitHub</a>
                     <a href="https://oauth.net/2/">OAuth 2.0</a>
+                    <a href="https://www.keycloak.org/">Keycloak</a>
+                    <a href="https://github.com/keycloak">Keycloak GitHub</a>
                 </div>
             </div>
         </div>

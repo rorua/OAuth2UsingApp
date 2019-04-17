@@ -49,6 +49,13 @@ return [
         'client_secret' => env('CLIENT_SECRET'),
         'callback_url' => env('APP_URL') . '/' . env('CALLBACK_URL'),
         'provider_url' => env('PROVIDER_URL')
+    ],
+
+    'keycloak' => [
+        'client_id' => env('KEYCLOAK_CLIENT_ID'),
+        'client_secret' => env('KEYCLOAK_CLIENT_SECRET'),
+        'callback_url' => env('APP_URL') . '/' . env('KEYCLOAK_CALLBACK_URL'),
+        'provider_url' => env('KEYCLOAK_PROVIDER_URL')
     ]
 
 ];
