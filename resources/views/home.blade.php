@@ -19,7 +19,7 @@
                         @else
                             <div class="row">
                                 <div class="col-md-4">
-                                    <img src="{{ auth()->user()->avatar }}" class="rounded img-thumbnail" alt="">
+                                    <img src="{{ auth()->user()->picture }}" class="rounded img-thumbnail" alt="">
                                 </div>
                                 <div class="col-md-8">
 
@@ -34,14 +34,21 @@
                                             <td>{{ auth()->user()->surname }}</td>
                                         </tr>
 
+                                        @if(auth()->user()->birthday)
                                         <tr>
                                             <th>Birthday </th>
                                             <td>{{ auth()->user()->birthday }}</td>
                                         </tr>
+                                        @endif
 
                                         <tr>
                                             <th>email </th>
                                             <td>{{ auth()->user()->email }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Auth provider </th>
+                                            <td>{{ auth()->user()->provider }}</td>
                                         </tr>
 
                                         </tbody>

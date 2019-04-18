@@ -34,21 +34,29 @@ class OAuthorize
         return $this->provider->redirect();
     }
 
+    /**
+     * @return Contracts\User
+     */
     public function user()
     {
         return $this->provider->user();
     }
 
     /**
-     * @param mixed $provider
+     * @param string $provider
      */
     public function setProvider($provider)
     {
         $this->provider = $provider;
     }
 
+    /**
+     * @param string $providerName
+     * @return AbstractProvider
+     */
     private function getProvider($providerName)
     {
+        //todo
         $providerClass = 'App\Auth\Providers\\'.Str::studly($providerName).'Provider';
 
         return (new $providerClass);

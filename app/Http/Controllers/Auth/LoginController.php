@@ -96,8 +96,10 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function logout()
+    public function logout($provider)
     {
+        //(new OAuthorize($provider))->logout();
+
         auth()->logout();
 
         return redirect('/');

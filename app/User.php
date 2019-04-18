@@ -26,6 +26,8 @@ class User extends Authenticatable
         'phone_number',
     ];
 
+    protected $appends = ['picture'];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -43,4 +45,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @return string
+     */
+    public function getPictureAttribute()
+    {
+        return $this->avatar ?: asset('/noavatar.png');
+    }
 }
